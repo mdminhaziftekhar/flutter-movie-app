@@ -2,11 +2,64 @@ import 'package:bitmascot_assessment/constants/typography.dart';
 import 'package:flutter/material.dart';
 
 import '../features/description/description.dart';
+import '../services/api_services.dart';
 
-class TrendingMovies extends StatelessWidget {
-  final List trending;
+class TrendingMovies extends StatefulWidget {
+  const TrendingMovies({Key? key}) : super(key: key);
 
-  const TrendingMovies({Key? key, required this.trending}) : super(key: key);
+  @override
+  State<TrendingMovies> createState() => _TrendingMoviesState();
+}
+
+class _TrendingMoviesState extends State<TrendingMovies> {
+  final ApiService _apiService = ApiService();
+
+  List trendingMovies = [];
+
+  int trendingPage = 1;
+
+  bool isLoading = false;
+
+  ScrollController _scrollController = ScrollController();
+  @override
+  void initState() {
+    super.initState();
+    loadTrendingMovies();
+    _scrollController.addListener(_scrollListener);
+  }
+
+  Future<void> loadTrendingMovies() async {
+    if (isLoading) return;
+
+    setState(() {
+      isLoading = true;
+    });
+
+    try {
+      final movies = await _apiService.getTrendingMovies(trendingPage);
+      setState(() {
+        trendingMovies.addAll(movies);
+        trendingPage++;
+        isLoading = false;
+      });
+    } catch (e) {
+      print(e);
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
+
+  void _scrollListener() {
+    if (_scrollController.position.pixels ==
+        _scrollController.position.maxScrollExtent) {
+      // Reached the bottom of the ListView
+      if (!isLoading) {
+        loadTrendingMovies();
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -22,70 +75,80 @@ class TrendingMovies extends StatelessWidget {
           Container(
               height: 270,
               child: ListView.builder(
+                controller: _scrollController,
                   scrollDirection: Axis.horizontal,
-                  itemCount: trending.length,
+                  itemCount: trendingMovies.length,
                   itemBuilder: (context, index) {
-                    return InkWell(
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => Description(
-                                      name: trending[index]['title'] != null
-                                          ? trending[index]['title']
-                                          : 'Sorry there are some error',
-                                      bannerurl: trending[index]
-                                                  ['backdrop_path'] !=
-                                              null
-                                          ? 'https://image.tmdb.org/t/p/w500' +
-                                              trending[index]['backdrop_path']
-                                          : 'https://via.placeholder.com/500x300.png?text=Default+Image',
-                                      posterurl:
-                                          'https://image.tmdb.org/t/p/w500' +
-                                              trending[index]['poster_path'],
-                                      description:
-                                          trending[index]['overview'] != null
-                                              ? trending[index]['overview']
-                                              : 'There was a problem',
-                                      vote: trending[index]['vote_average'] !=
-                                              null
-                                          ? trending[index]['vote_average']
-                                              .toString()
-                                          : 'There was a problem',
-                                      launchedOn: trending[index]
-                                                  ['release_date'] !=
-                                              null
-                                          ? trending[index]['release_date']
-                                          : 'There was a problem',
-                                    )));
-                      },
-                      child: Container(
-                        width: 140,
-                        child: Column(
-                          children: [
-                            Container(
-                              decoration: BoxDecoration(
-                                image: DecorationImage(
-                                  image: NetworkImage(
-                                      'https://image.tmdb.org/t/p/w500' +
-                                          trending[index]['poster_path']),
-                                ),
-                              ),
-                              height: 200,
-                            ),
-                            SizedBox(height: 5),
-                            Container(
-                              child: Text(
-                                trending[index]['title'] != null
-                                    ? trending[index]['title']
-                                    : 'Loading',
-                                style: bodyFont14White,
-                              ),
-                            )
-                          ],
+                    if (index == trendingMovies.length-1) {
+                      // Reached the end, show the loading indicator
+                      return const Center(
+                        child: CircularProgressIndicator(
+                          strokeWidth: 1,
                         ),
-                      ),
-                    );
+                      );
+                    } else {
+                      return InkWell(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => Description(
+                                        name: trendingMovies[index]['title'] != null
+                                            ? trendingMovies[index]['title']
+                                            : 'Sorry there are some error',
+                                        bannerurl: trendingMovies[index]
+                                                    ['backdrop_path'] !=
+                                                null
+                                            ? 'https://image.tmdb.org/t/p/w500' +
+                                                trendingMovies[index]['backdrop_path']
+                                            : 'https://via.placeholder.com/500x300.png?text=Default+Image',
+                                        posterurl:
+                                            'https://image.tmdb.org/t/p/w500' +
+                                                trendingMovies[index]['poster_path'],
+                                        description:
+                                            trendingMovies[index]['overview'] != null
+                                                ? trendingMovies[index]['overview']
+                                                : 'There was a problem',
+                                        vote: trendingMovies[index]['vote_average'] !=
+                                                null
+                                            ? trendingMovies[index]['vote_average']
+                                                .toString()
+                                            : 'There was a problem',
+                                        launchedOn: trendingMovies[index]
+                                                    ['release_date'] !=
+                                                null
+                                            ? trendingMovies[index]['release_date']
+                                            : 'There was a problem',
+                                      )));
+                        },
+                        child: Container(
+                          width: 140,
+                          child: Column(
+                            children: [
+                              Container(
+                                decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                    image: NetworkImage(
+                                        'https://image.tmdb.org/t/p/w500' +
+                                            trendingMovies[index]['poster_path']),
+                                  ),
+                                ),
+                                height: 200,
+                              ),
+                              SizedBox(height: 5),
+                              Container(
+                                child: Text(
+                                  trendingMovies[index]['title'] != null
+                                      ? trendingMovies[index]['title']
+                                      : 'Loading',
+                                  style: bodyFont14White,
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                      );
+                    }
                   }))
         ],
       ),
