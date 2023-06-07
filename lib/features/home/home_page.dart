@@ -16,7 +16,7 @@ class HomePage extends StatelessWidget {
         backgroundColor: Colors.transparent,
       ),
       body: ListView(
-        children: [
+        children: const  [
           PopularTV(),
           SizedBox(height: 20),
           TrendingMovies(),

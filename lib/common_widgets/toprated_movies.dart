@@ -51,7 +51,6 @@ class _TopRatedMoviesState extends State<TopRatedMovies> {
   void _scrollListener() {
     if (_scrollController.position.pixels ==
         _scrollController.position.maxScrollExtent) {
-      // Reached the bottom of the ListView
       if (!isLoading) {
         loadTopRatedMovies();
       }
@@ -61,16 +60,13 @@ class _TopRatedMoviesState extends State<TopRatedMovies> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(10),
+      padding: const EdgeInsets.all(10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            'Top Rated Movies',
-            style: bodyFont16White,
-          ),
-          SizedBox(height: 10),
-          Container(
+          _topTextWidget(),
+          const SizedBox(height: 10),
+          SizedBox(
               height: 270,
               child: ListView.builder(
                   controller: _scrollController,
@@ -78,8 +74,7 @@ class _TopRatedMoviesState extends State<TopRatedMovies> {
                   itemCount: topRatedMovies.length,
                   itemBuilder: (context, index) {
                     if (index == topRatedMovies.length - 1) {
-                      // Reached the end, show the loading indicator
-                      return Center(
+                      return const Center(
                         child: CircularProgressIndicator(
                           strokeWidth: 1,
                         ),
@@ -91,26 +86,18 @@ class _TopRatedMoviesState extends State<TopRatedMovies> {
                             context,
                             MaterialPageRoute(
                                 builder: (context) => Description(
-                                      name:
-                                          topRatedMovies[index]['title'] != null
-                                              ? topRatedMovies[index]['title']
-                                              : 'Sorry there are some error',
+                                      name: topRatedMovies[index]['title'] ??
+                                          'Sorry there are some error',
                                       bannerurl: topRatedMovies[index]
                                                   ['backdrop_path'] !=
                                               null
-                                          ? 'https://image.tmdb.org/t/p/w500' +
-                                              topRatedMovies[index]
-                                                  ['backdrop_path']
+                                          ? 'https://image.tmdb.org/t/p/w500${topRatedMovies[index]['backdrop_path']}'
                                           : 'https://via.placeholder.com/500x300.png?text=Default+Image',
                                       posterurl:
-                                          'https://image.tmdb.org/t/p/w500' +
-                                              topRatedMovies[index]
-                                                  ['poster_path'],
+                                          'https://image.tmdb.org/t/p/w500${topRatedMovies[index]['poster_path']}',
                                       description: topRatedMovies[index]
-                                                  ['overview'] !=
-                                              null
-                                          ? topRatedMovies[index]['overview']
-                                          : 'There was a problem',
+                                              ['overview'] ??
+                                          'There was a problem',
                                       vote: topRatedMovies[index]
                                                   ['vote_average'] !=
                                               null
@@ -119,14 +106,11 @@ class _TopRatedMoviesState extends State<TopRatedMovies> {
                                               .toString()
                                           : 'There was a problem',
                                       launchedOn: topRatedMovies[index]
-                                                  ['release_date'] !=
-                                              null
-                                          ? topRatedMovies[index]
-                                              ['release_date']
-                                          : 'There was a problem',
+                                              ['release_date'] ??
+                                          'There was a problem',
                                     )));
                       },
-                      child: Container(
+                      child: SizedBox(
                         width: 140,
                         child: Column(
                           children: [
@@ -134,18 +118,15 @@ class _TopRatedMoviesState extends State<TopRatedMovies> {
                               decoration: BoxDecoration(
                                 image: DecorationImage(
                                   image: NetworkImage(
-                                      'https://image.tmdb.org/t/p/w500' +
-                                          topRatedMovies[index]['poster_path']),
+                                      'https://image.tmdb.org/t/p/w500${topRatedMovies[index]['poster_path']}'),
                                 ),
                               ),
                               height: 200,
                             ),
-                            SizedBox(height: 5),
-                            Container(
+                            const SizedBox(height: 5),
+                            SizedBox(
                               child: Text(
-                                topRatedMovies[index]['title'] != null
-                                    ? topRatedMovies[index]['title']
-                                    : 'Loading',
+                                topRatedMovies[index]['title'] ?? 'Loading',
                                 style: bodyFont14White,
                               ),
                             )
@@ -156,6 +137,13 @@ class _TopRatedMoviesState extends State<TopRatedMovies> {
                   }))
         ],
       ),
+    );
+  }
+
+  Widget _topTextWidget() {
+    return Text(
+      'Top Rated Movies',
+      style: bodyFont16White,
     );
   }
 }

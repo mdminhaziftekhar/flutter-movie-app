@@ -60,8 +60,9 @@ class _PopularTVState extends State<PopularTV> {
 
   @override
   Widget build(BuildContext context) {
+    
     return Container(
-      padding: EdgeInsets.all(10),
+      padding: const EdgeInsets.all(10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -69,9 +70,8 @@ class _PopularTVState extends State<PopularTV> {
             'Popular TV Shows',
             style: h2BoldWhite,
           ),
-          SizedBox(height: 10),
-          Container(
-              // color: Colors.red,
+          const SizedBox(height: 10),
+          SizedBox(
               height: 200,
               child: ListView.builder(
                   controller: _scrollController,
@@ -92,36 +92,28 @@ class _PopularTVState extends State<PopularTV> {
                               context,
                               MaterialPageRoute(
                                   builder: (context) => Description(
-                                        name: tvShows[index]['title'] != null
-                                            ? tvShows[index]['title']
-                                            : 'Sorry there are some error',
+                                        name: tvShows[index]['title'] ?? 'Sorry there are some error',
                                         bannerurl: tvShows[index]
                                                     ['backdrop_path'] !=
                                                 null
-                                            ? 'https://image.tmdb.org/t/p/w500' +
-                                                tvShows[index]['backdrop_path']
+                                            ? 'https://image.tmdb.org/t/p/w500${tvShows[index]['backdrop_path']}'
+                                                
                                             : 'https://via.placeholder.com/500x300.png?text=Default+Image',
                                         posterurl:
-                                            'https://image.tmdb.org/t/p/w500' +
-                                                tvShows[index]['poster_path'],
+                                            'https://image.tmdb.org/t/p/w500${tvShows[index]['poster_path']}'
+                                                ,
                                         description:
-                                            tvShows[index]['overview'] != null
-                                                ? tvShows[index]['overview']
-                                                : 'There was a problem',
+                                            tvShows[index]['overview'] ?? 'There was a problem',
                                         vote: tvShows[index]['vote_average'] !=
                                                 null
                                             ? tvShows[index]['vote_average']
                                                 .toString()
                                             : 'There was a problem',
-                                        launchedOn: tvShows[index]
-                                                    ['release_date'] !=
-                                                null
-                                            ? tvShows[index]['release_date']
-                                            : 'There was a problem',
+                                        launchedOn: tvShows[index]['release_date'] ?? 'There was a problem',
                                       )));
                         },
                         child: Container(
-                          padding: EdgeInsets.all(5),
+                          padding: const EdgeInsets.all(5),
                           // color: Colors.green,
                           width: 250,
                           child: Column(
@@ -133,19 +125,17 @@ class _PopularTVState extends State<PopularTV> {
                                       image: NetworkImage(tvShows[index]
                                                   ['backdrop_path'] !=
                                               null
-                                          ? 'https://image.tmdb.org/t/p/w500' +
-                                              tvShows[index]['backdrop_path']
+                                          ? 'https://image.tmdb.org/t/p/w500${tvShows[index]['backdrop_path']}'
+                                              
                                           : 'https://via.placeholder.com/500x300.png?text=Default+Image'),
                                       fit: BoxFit.cover),
                                 ),
                                 height: 140,
                               ),
-                              SizedBox(height: 5),
-                              Container(
+                              const SizedBox(height: 5),
+                              SizedBox(
                                 child: Text(
-                                  tvShows[index]['original_title'] != null
-                                      ? tvShows[index]['original_title']
-                                      : 'There was a problem',
+                                  tvShows[index]['original_title'] ?? 'There was a problem',
                                   style: bodyFont14White,
                                 ),
                               )

@@ -53,7 +53,6 @@ class _TrendingMoviesState extends State<TrendingMovies> {
   void _scrollListener() {
     if (_scrollController.position.pixels ==
         _scrollController.position.maxScrollExtent) {
-      // Reached the bottom of the ListView
       if (!isLoading) {
         loadTrendingMovies();
       }
@@ -63,23 +62,20 @@ class _TrendingMoviesState extends State<TrendingMovies> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(10),
+      padding: const EdgeInsets.all(10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            'Trending Movies',
-            style: h2BoldWhite,
-          ),
-          SizedBox(height: 10),
-          Container(
+          _topTextWidget(),
+          const SizedBox(height: 10),
+          SizedBox(
               height: 270,
               child: ListView.builder(
-                controller: _scrollController,
+                  controller: _scrollController,
                   scrollDirection: Axis.horizontal,
                   itemCount: trendingMovies.length,
                   itemBuilder: (context, index) {
-                    if (index == trendingMovies.length-1) {
+                    if (index == trendingMovies.length - 1) {
                       // Reached the end, show the loading indicator
                       return const Center(
                         child: CircularProgressIndicator(
@@ -93,35 +89,31 @@ class _TrendingMoviesState extends State<TrendingMovies> {
                               context,
                               MaterialPageRoute(
                                   builder: (context) => Description(
-                                        name: trendingMovies[index]['title'] != null
-                                            ? trendingMovies[index]['title']
-                                            : 'Sorry there are some error',
+                                        name: trendingMovies[index]['title'] ??
+                                            'Sorry there are some error',
                                         bannerurl: trendingMovies[index]
                                                     ['backdrop_path'] !=
                                                 null
-                                            ? 'https://image.tmdb.org/t/p/w500' +
-                                                trendingMovies[index]['backdrop_path']
+                                            ? 'https://image.tmdb.org/t/p/w500${trendingMovies[index]['backdrop_path']}'
                                             : 'https://via.placeholder.com/500x300.png?text=Default+Image',
                                         posterurl:
-                                            'https://image.tmdb.org/t/p/w500' +
-                                                trendingMovies[index]['poster_path'],
-                                        description:
-                                            trendingMovies[index]['overview'] != null
-                                                ? trendingMovies[index]['overview']
-                                                : 'There was a problem',
-                                        vote: trendingMovies[index]['vote_average'] !=
+                                            'https://image.tmdb.org/t/p/w500${trendingMovies[index]['poster_path']}',
+                                        description: trendingMovies[index]
+                                                ['overview'] ??
+                                            'There was a problem',
+                                        vote: trendingMovies[index]
+                                                    ['vote_average'] !=
                                                 null
-                                            ? trendingMovies[index]['vote_average']
+                                            ? trendingMovies[index]
+                                                    ['vote_average']
                                                 .toString()
                                             : 'There was a problem',
                                         launchedOn: trendingMovies[index]
-                                                    ['release_date'] !=
-                                                null
-                                            ? trendingMovies[index]['release_date']
-                                            : 'There was a problem',
+                                                ['release_date'] ??
+                                            'There was a problem',
                                       )));
                         },
-                        child: Container(
+                        child: SizedBox(
                           width: 140,
                           child: Column(
                             children: [
@@ -129,18 +121,15 @@ class _TrendingMoviesState extends State<TrendingMovies> {
                                 decoration: BoxDecoration(
                                   image: DecorationImage(
                                     image: NetworkImage(
-                                        'https://image.tmdb.org/t/p/w500' +
-                                            trendingMovies[index]['poster_path']),
+                                        'https://image.tmdb.org/t/p/w500${trendingMovies[index]['poster_path']}'),
                                   ),
                                 ),
                                 height: 200,
                               ),
-                              SizedBox(height: 5),
-                              Container(
+                              const SizedBox(height: 5),
+                              SizedBox(
                                 child: Text(
-                                  trendingMovies[index]['title'] != null
-                                      ? trendingMovies[index]['title']
-                                      : 'Loading',
+                                  trendingMovies[index]['title'] ?? 'Loading',
                                   style: bodyFont14White,
                                 ),
                               )
@@ -152,6 +141,13 @@ class _TrendingMoviesState extends State<TrendingMovies> {
                   }))
         ],
       ),
+    );
+  }
+
+  Widget _topTextWidget() {
+    return Text(
+      'Trending Movies',
+      style: h2BoldWhite,
     );
   }
 }

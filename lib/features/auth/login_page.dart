@@ -44,7 +44,7 @@ class _LoginPageState extends State<LoginPage> {
               _emailInputWidget(),
               const SizedBox(height: 20),
               _passwordInputWidget(),
-              const SizedBox(height: 60),
+              const SizedBox(height: 150),
               _loginButton(),
               const SizedBox(height: 20),
               _forgotPasswordTextWidget(),
