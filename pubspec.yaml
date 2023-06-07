@@ -37,6 +37,7 @@ dependencies:
   validators: ^3.0.0
   provider: ^6.0.5
   http: ^1.0.0
+  tmdb_api: ^2.1.5
 
 dev_dependencies:
   flutter_test:
