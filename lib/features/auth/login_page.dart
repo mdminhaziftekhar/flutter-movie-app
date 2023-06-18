@@ -1,9 +1,11 @@
-import 'package:bitmascot_assessment/common_widgets/app_button_widget.dart';
-import 'package:bitmascot_assessment/constants/typography.dart';
-import 'package:bitmascot_assessment/features/home/home_page.dart';
-import 'package:bitmascot_assessment/models/email_model.dart';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import '../../common_widgets/app_button_widget.dart';
+import '../../constants/typography.dart';
+import '../../models/email_model.dart';
+import '../home/home_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});

@@ -1,5 +1,6 @@
-import 'package:bitmascot_assessment/constants/typography.dart';
 import 'package:flutter/material.dart';
+
+import '../../constants/typography.dart';
 
 class Description extends StatelessWidget {
   final String name, description, bannerurl, posterurl, vote, launchedOn;

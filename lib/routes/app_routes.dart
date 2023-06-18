@@ -1,6 +1,8 @@
-import 'package:bitmascot_assessment/features/auth/login_page.dart';
-import 'package:bitmascot_assessment/features/home/home_page.dart';
+
 import 'package:flutter/material.dart';
+
+import '../features/auth/login_page.dart';
+import '../features/home/home_page.dart';
 
 class AppRoutes{
   static const homePage = '/home-page';

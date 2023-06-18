@@ -1,6 +1,6 @@
-import 'package:bitmascot_assessment/constants/typography.dart';
 import 'package:flutter/material.dart';
 
+import '../constants/typography.dart';
 import '../features/description/description.dart';
 import '../services/api_services.dart';
 

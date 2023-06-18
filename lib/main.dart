@@ -1,7 +1,7 @@
-import 'package:bitmascot_assessment/features/auth/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import 'features/auth/login_page.dart';
 import 'models/email_model.dart';
 
 void main() {
